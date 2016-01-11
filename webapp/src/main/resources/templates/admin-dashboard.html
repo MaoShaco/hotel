@@ -1,0 +1,115 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{dashboard}"></title>
+    <style type="text/css">
+        table tr th {
+            width: 20%;
+        }
+    </style>
+</head>
+<body>
+
+<div th:include="fragments/header"></div>
+<div class="container content-div">
+    <div class="page-header">
+        <h1 th:text="#{dashboard}"></h1>
+    </div>
+
+    <div class="tabbable-panel">
+        <div class="tabbable-line">
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#tab_default_1" data-toggle="tab"><h4><i
+                        class="glyphicon glyphicon-th-list"></i><span th:text="#{clients}"></span></h4></a></li>
+                <li><a href="#tab_default_2" data-toggle="tab"><h4><i
+                        class="glyphicon glyphicon-th-list"></i>  <span th:text="#{managers}"></span></h4></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_default_1">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th th:text="#{name}"></th>
+                            <th th:text="#{username}"></th>
+                            <th th:text="#{email}"></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tr th:each="profile : ${users.?[authority.role == 'ROLE_USER']}">
+                            <td><span th:text="${profile.name}"></span></td>
+                            <td><a th:href="@{|/users/${profile.id}|}"><span
+                                    th:text="${profile.username}"></span></a></td>
+                            <td><span th:text="${profile.email}"></span></td>
+                            <td>
+                                <a th:href="@{|/users/${profile.id}/edit|}">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a th:href="@{|/users/${profile.id}/remove|}">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="tab-pane" id="tab_default_2">
+                    <h4 th:text="#{hotelManager}"></h4>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th th:text="#{name}"></th>
+                            <th th:text="#{username}"></th>
+                            <th th:text="#{email}"></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tr
+                                th:each="profile : ${users.?[authority.role == 'ROLE_HOTEL_MANAGER']}">
+                            <td><span th:text="${profile.name}"></span></td>
+                            <td><a th:href="@{|/users/${profile.id}|}"><span
+                                    th:text="${profile.username}"></span></a></td>
+                            <td><span th:text="${profile.email}"></span></td>
+                            <td sec:authorize="hasAnyRole('HOTEL_MANAGER')">
+                                <a th:href="@{|/users/${profile.id}/edit|}">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                    <h4 th:text="#{managers}"></h4>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th th:text="#{name}"></th>
+                            <th th:text="#{username}"></th>
+                            <th th:text="#{email}"></th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tr th:each="profile : ${users.?[authority.role == 'ROLE_ADMIN']}">
+                            <td><span th:text="${profile.name}"></span></td>
+                            <td><a th:href="@{|/users/${profile.id}|}"><span
+                                    th:text="${profile.username}"></span></a></td>
+                            <td><span th:text="${profile.email}"></span></td>
+                            <td>
+                                <a th:href="@{|/users/${profile.id}/edit|}">
+                                    <i class="glyphicon glyphicon-pencil"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a th:href="@{|/users/${profile.id}/remove|}">
+                                    <i class="glyphicon glyphicon-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="fragments/footer"></div>
+</body>
+</html>
+

@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="#{bookingList}"></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+</head>
+<body>
+
+	<div th:include="fragments/header"></div>
+
+	<div class="container content-div">
+		<div class="page-header">
+			<h1 th:text="#{bookingList}"></h1>
+		</div>
+
+		<table class="table">
+			<thead>
+				<tr>
+					<th th:text="#{id}"></th>
+					<th th:text="#{username}"></th>
+					<th th:text="#{checkIn}"></th>
+					<th th:text="#{checkOut}"></th>
+					<th th:text="#{hotelM}"></th>
+					<th th:text="#{roomType}"></th>
+					<th th:text="#{roomNumber}"></th>
+					<th th:text="#{state}"></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tr th:class="${!booking.state} ? 'warning' : 'success'"
+				th:each="booking : ${bookings}">
+				<td><span th:text="${booking.id}"></span></td>
+				<td><span th:text="${booking.profile.name}"></span></td>
+				<td><span th:text="${#dates.day(booking.begin_date)}"></span> <span
+					th:text="${#dates.monthNameShort(booking.begin_date)}"></span> <span
+					th:text="${#dates.year(booking.begin_date)}"></span></td>
+				<td><span th:text="${#dates.day(booking.end_date)}"></span> <span
+					th:text="${#dates.monthNameShort(booking.end_date)}"></span> <span
+					th:text="${#dates.year(booking.end_date)}"></span></td>
+				<td><span th:text="${booking.hotel.name}"></span></td>
+				<td><span th:text="${booking.roomType}"></span></td>
+				<td>
+					<div th:each="r : ${booking.rooms}">
+						<span th:text="${r.room_number}"></span>
+					</div>
+				</td>
+				<td><span th:if="${booking.state}"><i
+						class="glyphicon glyphicon-ok"></i></span></td>
+				<td><a th:if="${!booking.state}"
+					th:href="@{|/bookings/${booking.id}/approve|}"><i
+						class="glyphicon glyphicon-ok"></i></a></td>
+				<td><a th:href="@{|/bookings/${booking.id}/remove|}"><i
+						class="glyphicon glyphicon-trash"></i></a></td>
+			</tr>
+		</table>
+	</div>
+	<div th:include="fragments/footer"></div>
+</body>
+</html>
+

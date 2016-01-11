@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+</head>
+<body>
+
+<div class="container content-div">
+    <h1 th:text="#{users} + ' ' + #{form}"></h1>
+
+    <div th:fragment="userform(url)">
+        <form action="#" th:action="${url}" th:object="${profile}" method="post" id="profile"
+              ng-app="myApp" ng-controller="validateCtrl" name="myForm">
+            <div>
+                <input th:if="${profile == null}" type="hidden" th:field="*{id}"/>
+                <p><label th:text="#{name}"></label>
+                    <input class="form-control" th:placeholder="#{name}" type="text"
+                           name="name" id="name" ng-model="name" required="required" th:value="${profile.name}"/>
+                    <span style="color:red" ng-show="myForm.name.$dirty &amp;&amp; myForm.name.$invalid">
+                    <span ng-show="myForm.name.$error.required" th:text="#{nameRequired}"></span>
+                    </span>
+                </p>
+                <p>
+                    <label th:text="#{username}"></label>
+                    <input class="form-control" th:placeholder="#{username}" type="text"
+                           name="username" id="username" ng-model="username" required="required"
+                           th:value="${profile.username}"/>
+                    <span style="color:red" ng-show="myForm.username.$dirty &amp;&amp; myForm.username.$invalid">
+                    <span ng-show="myForm.username.$error.required" th:text="#{usernameRequired}"></span>
+                    </span>
+                </p>
+                <p>
+                    <label th:text="#{email}"></label>
+                    <input class="form-control" th:placeholder="#{email}" type="email"
+                           name="email" id="email" ng-model="email" required="required" th:value="${profile.email}"/>
+                    <span style="color:red" ng-show="myForm.email.$dirty &amp;&amp; myForm.email.$invalid">
+                    <span ng-show="myForm.email.$error.required" th:text="#{emailRequired}"></span>
+                    <span ng-show="myForm.email.$error.email" th:text="#{invalidEmail}"></span>
+                    </span>
+                </p>
+                <p>
+                    <label th:text="#{password}"></label>
+                    <input class="form-control" th:placeholder="#{password}" type="password"
+                           name="password" id="password" ng-model="password" required="required"
+                           th:value="${profile.password}"/>
+                    <span style="color:red" ng-show="myForm.password.$dirty &amp;&amp; myForm.password.$invalid">
+                    <span ng-show="myForm.password.$error.required" th:text="#{passwordRequired}"></span>
+                    </span>
+                </p>
+
+
+<span sec:authorize="hasAnyRole('HOTEL_MANAGER', 'ADMIN')">
+<label th:text="#{role}"></label>
+<select class="form-control" th:field="*{authority}">
+    <option th:each="a : ${authorities}" th:text="${a.role}" th:value="${a.id}"></option>
+</select>
+</span>
+            </div>
+            <p>
+                <input class="btn btn-primary" type="submit" th:value="#{submit}" ng-disabled=" myForm.$invalid"/>
+
+                <input class="btn btn-default" type="reset" th:value="#{reset}"/>
+            </p>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

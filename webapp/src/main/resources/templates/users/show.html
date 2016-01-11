@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{users}"></title>
+    <style type="text/css">table tr th {
+        width: 18%;
+    }</style>
+</head>
+<body>
+<div th:include="fragments/header"></div>
+<div class="container content-div">
+    <div class="page-header">
+        <h1>
+            <span th:text="${profile.name}"></span>
+            <small><span
+                    th:text="${profile.username}"></span></small>
+        </h1>
+        <h4>
+            <span th:if="${profile.authority.role} == 'ROLE_ADMIN' + #{webAdmin}"></span>
+            <span th:if="${profile.authority.role} == 'ROLE_HOTEL_MANAGER' + #{hotelManager}"></span>
+            <span class="pull-right">  <a
+                    th:href="@{|/users/${profile.id}/edit|}"> <i
+                    class="glyphicon glyphicon-pencil"></i>
+            </a>
+                </span>
+        </h4>
+    </div>
+
+    <div class="tabbable-panel">
+        <div class="tabbable-line">
+            <ul class="nav nav-tabs nav-justified">
+                <li class="active"><a href="#tab_default_1" data-toggle="tab"><h4><i
+                        class="glyphicon glyphicon-th-list"></i> <span th:text="#{approvedBookings}"></span></h4></a></li>
+                <li><a href="#tab_default_2" data-toggle="tab"><h4><i class="glyphicon glyphicon-th-list"></i><span th:text="#{pendingBookings}"></span></h4></a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_default_1">
+                    <div th:if="${!#lists.isEmpty(bookings)}">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th th:text="#{checkIn}"></th>
+                                <th th:text="#{checkOut}"></th>
+                                <th th:text="#{hotelM}"></th>
+                                <th th:text="#{roomType}"></th>
+                                <th th:text="#{roomNumber}"></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tr th:if="${booking.state}" th:each="booking : ${bookings}">
+                                <td><span th:text="${#dates.day(booking.begin_date)}"></span>
+                                    <span th:text="${#dates.monthName(booking.begin_date)}"></span>
+                                    <span th:text="${#dates.year(booking.begin_date)}"></span></td>
+                                <td><span th:text="${#dates.day(booking.end_date)}"></span>
+                                    <span th:text="${#dates.monthName(booking.end_date)}"></span>
+                                    <span th:text="${#dates.year(booking.end_date)}"></span></td>
+                                <td>
+                                    <a th:text="${booking.hotel.name}"
+                                       th:href="@{|/hotels/${booking.hotel.id}|}"></a>
+                                </td>
+                                <td><span th:text="${booking.roomType}"></span></td>
+                                <td>
+                                    <div th:each="r : ${booking.rooms}">
+                                        <span th:text="${r.room_number}"></span>
+                                    </div>
+                                </td>
+                                <td><a th:href="@{|/bookings/${booking.id}/remove|}"><i
+                                        class="glyphicon glyphicon-trash"></i></a></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p th:if="${#lists.isEmpty(bookings)}">
+                        <i th:text="#{noBookings}"></i>
+                    </p>
+                </div>
+                <div class="tab-pane" id="tab_default_2">
+                    <div th:if="${!#lists.isEmpty(bookings)}">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th th:text="#{checkIn}"></th>
+                                <th th:text="#{checkOut}"></th>
+                                <th th:text="#{hotelM}"></th>
+                                <th th:text="#{roomType}"></th>
+                                <th th:text="#{roomNumber}"></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tr th:if="${!booking.state}" th:each="booking : ${bookings}">
+                                <td><span th:text="${#dates.day(booking.begin_date)}"></span>
+                                    <span th:text="${#dates.monthName(booking.begin_date)}"></span>
+                                    <span th:text="${#dates.year(booking.begin_date)}"></span></td>
+                                <td><span th:text="${#dates.day(booking.end_date)}"></span>
+                                    <span th:text="${#dates.monthName(booking.end_date)}"></span>
+                                    <span th:text="${#dates.year(booking.end_date)}"></span></td>
+                                <td>
+                                    <a th:text="${booking.hotel.name}"
+                                       th:href="@{|/hotels/${booking.hotel.id}|}"></a>
+                                </td>
+                                <td><span th:text="${booking.roomType}"></span></td>
+                                <td>
+                                    <div th:each="r : ${booking.rooms}">
+                                        <span th:text="${r.room_number}"></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a th:href="@{|/bookings/${booking.id}/remove|}"><i
+                                            class="glyphicon glyphicon-trash"></i></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <p th:if="${#lists.isEmpty(bookings)}">
+                        <i th:text="#{noBookings}"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="fragments/footer"></div>
+</body>
+</html>

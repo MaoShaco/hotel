@@ -1,0 +1,250 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{hotelM}"></title>
+    <script th:src="@{|/js/pikaday.js|}"></script>
+    <link rel="stylesheet" th:href="@{|/css/pikaday.css|}"/>
+
+    <script th:src="@{|/js/app.js|}"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+</head>
+
+<body>
+<div th:include="fragments/header"></div>
+
+<div class="package text-center">
+    <link th:href="@{|/css/owl.carousel.css|}" rel="stylesheet"/>
+    <script th:src="@{|/js/owl.carousel.js|}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#owl-demo').owlCarousel({
+                items: 1,
+                lazyLoad: true,
+                autoPlay: true,
+                navigation: true,
+                navigationText: false,
+                pagination: false
+            });
+        });
+    </script>
+    <div id="owl-demo" class="owl-carousel">
+        <div class="item text-center image-grid">
+            <ul>
+                <li><img th:src="@{|/images/1.jpg|}"/></li>
+                <li><img th:src="@{|/images/2.jpg|}"/></li>
+                <li><img th:src="@{|/images/3.jpg|}"/></li>
+            </ul>
+        </div>
+        <div class="item text-center image-grid">
+            <ul>
+                <li><img th:src="@{|/images/3.jpg|}"/></li>
+                <li><img th:src="@{|/images/4.jpg|}"/></li>
+                <li><img th:src="@{|/images/5.jpg|}"/></li>
+            </ul>
+        </div>
+        <div class="item text-center image-grid">
+            <ul>
+                <li><img th:src="@{|/images/6.jpg|}"/></li>
+                <li><img th:src="@{|/images/2.jpg|}"/></li>
+                <li><img th:src="@{|/images/8.jpg|}"/></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container content-div">
+    <div th:fragment="hotel-header" class="page-header">
+        <h1>
+            <span th:text="${hotel.name}"></span>
+            <small> <span
+                    th:each="i : ${#numbers.sequence(1, hotel.rating)}"><i
+                    class="glyphicon glyphicon-star"></i></span> <span
+                    sec:authorize="${#authorization.expression(T(com.epam.training.security.AllowedForManageHotel).condition2)}"
+                    class="pull-right">  <a
+                    th:href="@{|/hotels/${hotel.id}/edit|}"> <i
+                    class="glyphicon glyphicon-pencil"></i>
+            </a>
+				</span>
+
+            </small>
+            <br/>
+            <small>
+                <span id="address" th:text="${hotel.address}"/>
+            </small>
+        </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tabbable-panel">
+                <div class="tabbable-line">
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="active">
+                            <a href="#tab_default_1"
+                               data-toggle="tab"><span th:text="#{photos}"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a onclick="displayMap()" href="#tab_default_2"
+                               data-toggle="tab"><span th:text="#{map}"></span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_default_1">
+                            <div class="slider">
+                                <img th:src="@{|/images/photo.jpg|}"
+                                     class="img-responsive img-rounded" alt="Hotel photo"/>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_default_2">
+                            <div class="img-responsive img-rounded" id="map"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <p>
+                <span>
+                    <a class="btn btn-default"
+                       href="#" data-toggle="modal" data-target="#myModalTypes"><span
+                            th:text="#{availableRoomTypes}"> </span></a>
+                </span>
+                <span>
+                <a
+                        class="btn btn-primary"
+                        sec:authorize="${#authorization.expression(T(com.epam.training.security.AllowedForManageHotel).condition2)}"
+                        href="#" data-toggle="modal"
+                        data-target="#myModal"><span th:text="#{see} + ' ' + #{occMap}"></span></a>
+                </span>
+            </p>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" th:text="#{selectDates}"></h4>
+                </div>
+                <div class="modal-body">
+
+                    <form th:object="${booking}" th:action="@{|/hotels/${hotel.id}/map|}" method="post">
+                        <p>
+                            <input type="hidden" th:field="*{id}"/>
+                        <div style="display: inline-block">
+                            <label for="start"><i
+                                    class='glyphicon glyphicon-calendar'></i><span th:text="#{checkIn}"></span></label>
+                            <input type="text" class="form-control" id="start" th:field="*{begin_date}"/>
+                        </div>
+
+                        </p>
+
+                        <div style="display: inline-block">
+                            <label for="end"><i class='glyphicon glyphicon-calendar'></i>
+                                <span th:text="#{checkOut}"></span></label> <input type="text" class="form-control"
+                                                                                   id="end"
+                                                                                   th:field="*{end_date}"/>
+                        </div>
+                        <input class="btn btn-primary" type="submit" th:value="#{see} + ' ' + #{occMap} "/>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{close}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModalTypes" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" th:text="#{availableRoomTypes}"></h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th th:text="#{description}"></th>
+                            <th th:text="#{price}"></th>
+                            <th th:text="#{occupancy}"></th>
+                        </tr>
+                        </thead>
+
+                        <tr th:each="hotelRoomType : ${hotelRoomTypes}">
+                            <td th:text="${hotelRoomType.key.description}"></td>
+                            <td th:text="${hotelRoomType.value.price} + ' ' + #{priceS}"></td>
+                            <td><span
+                                    th:each="i : ${#numbers.sequence(1, hotelRoomType.key.occupancy)}"><i
+                                    class="glyphicon glyphicon-profile"></i></span></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{close}"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="fragments/footer"></div>
+<script type="text/javascript">
+    var startDate,
+            endDate,
+            updateStartDate = function () {
+                startPicker.setStartRange(startDate);
+                endPicker.setStartRange(startDate);
+                endPicker.setMinDate(startDate);
+            },
+            updateEndDate = function () {
+                startPicker.setEndRange(endDate);
+                startPicker.setMaxDate(endDate);
+                endPicker.setEndRange(endDate);
+            },
+            startPicker = new Pikaday({
+                field: document.getElementById('start'),
+                minDate: new Date(),
+                maxDate: new Date(2020, 12, 31),
+                onSelect: function () {
+                    startDate = this.getDate();
+                    updateStartDate();
+                }
+            }),
+            endPicker = new Pikaday({
+                field: document.getElementById('end'),
+                minDate: new Date(),
+                maxDate: new Date(2020, 12, 31),
+                onSelect: function () {
+                    endDate = this.getDate();
+                    updateEndDate();
+                }
+            }),
+            _startDate = startPicker.getDate(),
+            _endDate = endPicker.getDate();
+
+    if (_startDate) {
+        startDate = _startDate;
+        updateStartDate();
+    }
+
+    if (_endDate) {
+        endDate = _endDate;
+        updateEndDate();
+    }
+</script>
+</body>
+</html>
+

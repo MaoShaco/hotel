@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Facilities</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<div th:include="fragments/header"></div>
+<div class="container content-div">
+    <div class="main">
+        <ul class="service_list">
+
+            <li th:each="roomType : ${roomTypes}">
+                <div class="ser_img">
+                    <a href="/fortune/details">
+                        <img th:src="@{|/images/ser_pic${roomType.id}.jpg|}"/>
+                        <span class="next"> </span>
+                    </a>
+                </div>
+                <a href="/fortune/details"><h3><span th:text="${roomType.description}"></span></h3></a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div th:include="fragments/footer"></div>
+</body>
+</html>

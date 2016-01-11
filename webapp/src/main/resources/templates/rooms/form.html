@@ -1,0 +1,40 @@
+
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div class="container content-div">
+		<div th:fragment="roomform(url)">
+			<form action="#" th:action="@{|/hotels/${hotel.id}/rooms/|}"
+				th:object="${room}" method="post">
+				<p>
+					<input type="hidden" th:field="*{id}" />
+					<label th:text="#{floor}"></label><input min="1" class="form-control" placeholder="Floor"
+						type="number" th:field="*{floor}" />
+				</p>
+				<p>
+					<label th:text="#{roomNumber}"></label><input class="form-control"
+						th:placeholder="#{roomNumber}" type="text" th:field="*{room_number}" />
+				</p>
+				<p>
+					<label th:text="#{price} + ' ' + #{priceS}"></label><input class="form-control"
+						th:placeholder="#{price} + ' ' + #{priceS}" type="text" th:field="*{price}" />
+				</p>
+				<p>
+					<label th:text="#{roomType}"></label>
+					<select class="form-control" th:field ="*{type}">
+		        		<option th:each="rt : ${roomTypes}" th:text="${rt.description}" th:value="${rt.id}"></option>
+		        	</select>	
+				</p>
+				<p>
+					<input class="btn btn-primary" type="submit" th:value="#{submit}" />
+					<input class="btn btn-default" type="reset" th:value="#{reset}" />
+				</p>
+				<p><a th:href="@{|/hotels/${hotel.id}/rooms/|}" th:text="#{back}"></a></p>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
+

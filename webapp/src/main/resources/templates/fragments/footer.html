@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <script th:src="@{|/js/app.js|}"></script>
+</head>
+<body>
+<div class="footer">
+    <div class="container">
+        <h3 th:text="#{commingSoon}"></h3>
+        <h4 th:text="#{recommendation}"></h4>
+        <i class="man"></i>
+    </div>
+</div>
+<!---->
+<div class="footer-info">
+    <div class="container">
+        <div class="col-md-12 details">
+            <div class="join">
+                <h4 th:text="#{whyFortune}"></h4>
+                <p th:text="#{whyFortuneContent}"></p>
+            </div>
+            <div class="member">
+                <h4 th:text="#{memberArea}"></h4>
+                <div th:if="${#httpServletRequest.remoteUser} == null">
+                    <form th:action="@{/}" method="post" class="form-horizontal"
+                          name="loginForm" id="loginForm">
+                        <div class="input-group input-sm">
+                            <label class="input-group-addon" for="username"><i id="usernameIco" class="fa fa-user fa-lg"></i></label>
+                            <input required="required" type="text" class="form-control" name="username" id="username"
+                                   th:placeholder="#{enterUsername}"/>
+                        </div>
+                        <div id="resultsBlock" class="resultsBlock">
+                        </div>
+                        <div class="input-group input-sm">
+                            <label class="input-group-addon" for="password"><i id="passwordIco" class="fa fa-lock fa-lg"></i></label>
+                            <input required="required" type="password" class="form-control" id="password"
+                                   name="password" th:placeholder="#{enterPassword}" />
+                        </div>
+                        <input type="hidden" name="${_csrf.parameterName}"
+                               value="${_csrf.token}"/>
+                        <a id="logIn" name="logIn"
+                                th:text="#{logIn}" onclick="justLogIn()"
+                        ></a>
+                        <br/>
+                        <a href="/users/new" th:text="#{signUp}"></a>
+                    </form>
+                </div>
+
+                <div th:if="${#httpServletRequest.remoteUser} != null">
+                    <form th:action="@{/logout}" method="post">
+                        <input class="btn btn-link navbar-btn" type="submit" th:value="#{logOut}"/>
+                    </form>
+                    <a href="/users/me" th:text="#{myBookings}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

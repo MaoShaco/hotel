@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="#{newBooking}"></title>
+    <link rel="stylesheet" href="../css/pikaday.css"/>
+    <script src="../js/pikaday.js"></script>
+</head>
+<body>
+<div th:include="fragments/header"></div>
+<div class="container content-div">
+    <div class="page-header"><h1 th:text="#{bookRoom}"></h1></div>
+    <div th:include="bookings/form :: bookingform(@{/bookings/})"></div>
+    <script type="text/javascript">
+        var startDate,
+                endDate,
+                updateStartDate = function () {
+                    startPicker.setStartRange(startDate);
+                    endPicker.setStartRange(startDate);
+                    endPicker.setMinDate(startDate);
+                },
+                updateEndDate = function () {
+                    startPicker.setEndRange(endDate);
+                    startPicker.setMaxDate(endDate);
+                    endPicker.setEndRange(endDate);
+                },
+                startPicker = new Pikaday({
+                    field: document.getElementById('start'),
+                    minDate: new Date(),
+                    maxDate: new Date(2020, 12, 31),
+                    onSelect: function () {
+                        startDate = this.getDate();
+                        updateStartDate();
+                    }
+                }),
+                endPicker = new Pikaday({
+                    field: document.getElementById('end'),
+                    minDate: new Date(),
+                    maxDate: new Date(2020, 12, 31),
+                    onSelect: function () {
+                        endDate = this.getDate();
+                        updateEndDate();
+                    }
+                }),
+                _startDate = startPicker.getDate(),
+                _endDate = endPicker.getDate();
+
+        if (_startDate) {
+            startDate = _startDate;
+            updateStartDate();
+        }
+
+        if (_endDate) {
+            endDate = _endDate;
+            updateEndDate();
+        }
+
+        var select = $("#ddl");
+        //for (i = 1; i &lt; 5; i++) {
+        select.append($('<option></option>').val(1).html(1));
+        select.append($('<option></option>').val(2).html(2));
+        //}
+
+    </script>
+</div>
+<div th:include="fragments/footer"></div>
+</body>
+</html>
+

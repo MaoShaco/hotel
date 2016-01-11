@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title th:text="#{editUser}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('validateCtrl', function ($scope) {
+		});
+	</script>
+</head>
+<body>
+	<div th:include="fragments/header"></div>
+	<div class="container content-div">
+		<h1>Editing User <span th:text="${profile.username}"></span></h1>
+		<div th:include="users/form :: userform(@{|/users/${profile.id}|})"></div>
+    </div>
+	<div th:include="fragments/footer"></div>
+</body>
+</html>
+

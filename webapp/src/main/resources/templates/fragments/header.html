@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="http://cdn.jsdelivr.net/webjars/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen"/>
+    <link rel="stylesheet" type="text/css" th:href="@{|/css/style.css|}"/>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.css" rel="stylesheet"/>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:fragment="header">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" th:href="#{langAtt}"><i class="fa fa-language fa-lg"></i></a>
+                <a class="navbar-brand" href="/"><i class="glyphicon glyphicon-home"></i></a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                <ul class="nav navbar-nav">
+                    <li><a href="/fortune/facilities" th:text="#{facilities}"></a></li>
+                    <li th:if="${#httpServletRequest.remoteUser} != null">
+                        <a href="/bookings/new" th:text="#{bookRoom}"></a>
+                    </li>
+                </ul>
+                <ul sec:authorize="hasAnyRole('ADMIN', 'HOTEL_MANAGER')" class="nav navbar-nav navbar-right">
+                    <li sec:authorize="hasAnyRole('HOTEL_MANAGER')"><a href="/bookings" th:text="#{bookings}"></a></li>
+                    <li ><a href="/admin" th:text="#{dashboard}"></a></li>
+
+                    <li th:each="hotel : ${#authentication.principal.profile.hotels}">
+                        <a th:href="@{|/hotels/${hotel.id}/rooms|}" th:text="#{manageRooms} + ' ' + ${hotel.name}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="banner">
+            <div class="banner-info text-center">
+                <h3>
+                    <span th:text="#{hello}"></span>
+                    <a href="/users/me" th:if="${#httpServletRequest.remoteUser} != null">
+                        <label
+                               th:text="${#authentication.principal.profile.name}">
+                        </label>
+                    </a>
+                    <span th:text="#{reached}"></span>
+
+                </h3>
+                <h1><span th:text="#{hotel}"/>
+                    <a href="/hotels/1">FORTUNE
+                    </a>
+                </h1>
+            </div>
+        </div>
+    </nav>
+</div>
+</body>
+</html>
