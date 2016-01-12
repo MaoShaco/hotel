@@ -10,6 +10,11 @@
     <h1 th:text="#{users} + ' ' + #{form}"></h1>
 
     <div th:fragment="userform(url)">
+        <div th:if="${error} != null">
+            <div class="alert alert-danger" role="alert">
+                <p th:text="${profile.username} + ' ' + #{userExists}"></p>
+            </div>
+        </div>
         <form action="#" th:action="${url}" th:object="${profile}" method="post" id="profile"
               ng-app="myApp" ng-controller="validateCtrl" name="myForm">
             <div>
@@ -50,12 +55,12 @@
                 </p>
 
 
-<span sec:authorize="hasAnyRole('HOTEL_MANAGER', 'ADMIN')">
-<label th:text="#{role}"></label>
-<select class="form-control" th:field="*{authority}">
-    <option th:each="a : ${authorities}" th:text="${a.role}" th:value="${a.id}"></option>
-</select>
-</span>
+                <span sec:authorize="hasAnyRole('HOTEL_MANAGER', 'ADMIN')">
+                <label th:text="#{role}"></label>
+                <select class="form-control" th:field="*{authority}">
+                    <option th:each="a : ${authorities}" th:text="${a.role}" th:value="${a.id}"></option>
+                </select>
+                </span>
             </div>
             <p>
                 <input class="btn btn-primary" type="submit" th:value="#{submit}" ng-disabled=" myForm.$invalid"/>

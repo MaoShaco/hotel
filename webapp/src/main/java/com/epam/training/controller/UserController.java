@@ -116,10 +116,11 @@ public class UserController {
             users.save(profile);
             model.addAttribute("profile", profile);
             model.addAttribute("authorities", authorities.findAll());
-            return "redirect:/admin";
+            return "redirect:/users/me";
         }
         model.addAttribute("profile", profile);
         model.addAttribute("authorities", authorities.findAll());
+        model.addAttribute("error", "Bad Username");
         return "users/edit";
 
     }
@@ -128,6 +129,7 @@ public class UserController {
     public String saveProfile(@ModelAttribute Profile profile, Model model) {
         if (users.findByUsername(profile.getUsername()) != null) {
             model.addAttribute("profile", profile);
+            model.addAttribute("error", "Bad Username");
             return "users/create";
         }
         Authority authority = authorities.findByRole("ROLE_USER");
