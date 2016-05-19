@@ -60,7 +60,7 @@
             <small> <span
                     th:each="i : ${#numbers.sequence(1, hotel.rating)}"><i
                     class="glyphicon glyphicon-star"></i></span> <span
-                    sec:authorize="${#authorization.expression(T(com.epam.training.security.AllowedForManageHotel).condition2)}"
+                    sec:authorize="${#authorization.expression(T(by.maoshaco.webapp.security.AllowedForManageHotel).condition2)}"
                     class="pull-right">  <a
                     th:href="@{|/hotels/${hotel.id}/edit|}"> <i
                     class="glyphicon glyphicon-pencil"></i>
@@ -115,7 +115,7 @@
                 <span>
                 <a
                         class="btn btn-primary"
-                        sec:authorize="${#authorization.expression(T(com.epam.training.security.AllowedForManageHotel).condition2)}"
+                        sec:authorize="${#authorization.expression(T(by.maoshaco.webapp.security.AllowedForManageHotel).condition2)}"
                         href="#" data-toggle="modal"
                         data-target="#myModal"><span th:text="#{see} + ' ' + #{occMap}"></span></a>
                 </span>
